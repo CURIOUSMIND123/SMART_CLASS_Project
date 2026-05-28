@@ -9,12 +9,12 @@ importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-comp
 // ── Firebase config (same as in index.html) ───────────────────
 // REPLACE these values with your own from Firebase Console
 firebase.initializeApp({
-  apiKey:            "REPLACE_WITH_YOUR_API_KEY",
-  authDomain:        "REPLACE_WITH_YOUR_AUTH_DOMAIN",
-  projectId:         "REPLACE_WITH_YOUR_PROJECT_ID",
-  storageBucket:     "REPLACE_WITH_YOUR_STORAGE_BUCKET",
-  messagingSenderId: "REPLACE_WITH_YOUR_SENDER_ID",
-  appId:             "REPLACE_WITH_YOUR_APP_ID"
+  apiKey:            "AIzaSyCoSSPOZvynkBdoXkzuu3IKABZxG4mUQD0",
+  authDomain:        "humanlens-edec1.firebaseapp.com",
+  projectId:         "humanlens-edec1",
+  storageBucket:     "humanlens-edec1.firebasestorage.app",
+  messagingSenderId: "93945701006",
+  appId:             "1:93945701006:web:ece08593fdad50b66a1fdf"
 });
 
 const messaging = firebase.messaging();
