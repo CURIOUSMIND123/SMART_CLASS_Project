@@ -1,0 +1,42 @@
+{
+  "name": "arunodaya-smart-school-command",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Offline-first Smart Classroom, School Operations and Government Monitoring Platform (laptop demo)",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "concurrently -k \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:server": "node server/index.js",
+    "dev:client": "vite",
+    "build": "vite build",
+    "start": "node server/index.js",
+    "test": "vitest run",
+    "seed": "node server/db.js --reseed",
+    "electron": "electron .",
+    "dist": "vite build && electron-builder --win"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.10.0",
+    "express": "^4.21.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.0",
+    "recharts": "^2.15.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.0",
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.7",
+    "vitest": "^2.1.8"
+  },
+  "build": {
+    "appId": "in.arunodaya.command",
+    "productName": "Arunodaya Smart School Command",
+    "files": ["electron/**", "server/**", "dist/**", "node_modules/**", "package.json"],
+    "win": { "target": "nsis" },
+    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true }
+  }
+}
