@@ -1,14 +1,425 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>Vidya Arunodaya — Offline Smart-Class Library</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>Vidya Arunodaya — Offline Smart-Class Library</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#0d1b3e;--navy2:#13286a;--bg:#eef2fb;--ink:#16223f;--dim:#5b6885;--line:#dce3f0;--saf:#ff7a1a;--grn:#0e9f7d;--blue:#2457c5}
+body{font-family:"Segoe UI",system-ui,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);-webkit-tap-highlight-color:transparent}
+/* top bar */
+.top{display:flex;align-items:center;gap:14px;padding:12px 22px;background:linear-gradient(90deg,var(--navy),var(--navy2));color:#fff;position:sticky;top:0;z-index:20}
+.top .logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#ff9a3b,#ff5e62);display:flex;align-items:center;justify-content:center;font-size:22px;flex:none}
+.top h1{font-size:18px;font-weight:800;letter-spacing:.3px;line-height:1.15}
+.top h1 small{display:block;font-size:11px;font-weight:400;color:#aab8e5}
+.top .sp{flex:1}
+.offline-badge{background:rgba(14,159,125,.22);border:1px solid #0e9f7d;color:#9df5da;font-size:12px;font-weight:700;padding:6px 12px;border-radius:20px}
+.langsel{display:flex;gap:4px;background:rgba(255,255,255,.1);padding:3px;border-radius:20px}
+.langsel button{background:transparent;border:none;color:#c0cdf2;font-size:12.5px;padding:6px 12px;border-radius:16px;cursor:pointer;font-weight:600;font-family:inherit}
+.langsel button.on{background:#fff;color:var(--navy)}
+/* breadcrumb */
+.crumb{padding:12px 22px;font-size:13.5px;color:var(--dim);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.crumb a{color:var(--blue);cursor:pointer;text-decoration:none;font-weight:600}
+.crumb .hint{margin-left:auto;color:var(--saf);font-weight:600}
+/* content grid */
+.wrap{padding:8px 22px 40px;max-width:1200px;margin:0 auto}
+.tiles{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.tile{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;cursor:pointer;transition:.14s;position:relative;overflow:hidden}
+.tile:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(13,27,62,.14);border-color:var(--blue)}
+.tile .ic{font-size:34px;margin-bottom:10px}
+.tile h3{font-size:16px;margin-bottom:4px}
+.tile .meta{font-size:12.5px;color:var(--dim)}
+.tile .cnt{position:absolute;top:14px;right:16px;background:#eef2fb;color:var(--blue);font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px}
+.tile.chapter{border-left:5px solid var(--saf)}
+.tag{display:inline-block;font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:6px;margin-right:5px}
+.tag.sim{background:#e4ecfc;color:#1d47a6}.tag.d3{background:#e7f6ef;color:#0a7c5f}.tag.orig{background:#fff0e2;color:#b4560a}.tag.quiz{background:#f2eafc;color:#6b28c2}.tag.hi{background:#fdeee2;color:#a3560a}
+/* lesson view */
+.lessonhead{display:flex;align-items:center;gap:12px;padding:14px 22px;background:#fff;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.lessonhead h2{font-size:19px}
+.tabbar{display:flex;gap:8px;padding:12px 22px 0;flex-wrap:wrap}
+.tabbar button{background:#fff;border:1px solid var(--line);color:var(--ink);border-radius:10px 10px 0 0;padding:10px 18px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+.tabbar button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.stage{background:#fff;border:1px solid var(--line);border-radius:0 12px 12px 12px;margin:0 22px;min-height:64vh;overflow:hidden}
+.stage iframe{width:100%;height:74vh;border:none;display:block;background:#fff}
+model-viewer{width:100%;height:70vh;background:radial-gradient(circle at 50% 40%,#20325e,#0d1b3e)}
+.readbox{padding:26px 30px;max-width:820px}
+.readbox p{font-size:16px;line-height:1.7;margin-bottom:14px;color:var(--ink)}
+.readbox .off{display:inline-block;margin-top:8px;background:var(--blue);color:#fff;padding:9px 16px;border-radius:9px;text-decoration:none;font-size:14px;font-weight:600}
+.quizbox{padding:26px 30px;max-width:720px}
+.quizbox h3{font-size:17px;margin-bottom:12px}
+.quizbox .opt{display:block;width:100%;text-align:left;background:#f5f7fc;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:8px 0;font-size:15px;cursor:pointer;font-family:inherit}
+.quizbox .opt.ok{background:#e2f6ef;border-color:var(--grn);color:#0a7c5f;font-weight:700}
+.quizbox .opt.no{background:#fbe4e8;border-color:#cc3344;color:#b02a3a}
+.btn{background:var(--blue);color:#fff;border:none;border-radius:9px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;text-decoration:none;display:inline-block}
+.attrib{font-size:11px;color:var(--dim);padding:10px 30px 20px;line-height:1.6}
+.hero{background:linear-gradient(120deg,#0d1b3e,#13286a);color:#fff;border-radius:18px;padding:26px 30px;margin-bottom:18px}
+.hero h2{font-size:22px;margin-bottom:6px}
+.hero p{color:#c0cdf2;font-size:14px;max-width:640px;line-height:1.6}
+.hero .stats{display:flex;gap:22px;margin-top:16px;flex-wrap:wrap}
+.hero .stats div{font-size:12px;color:#aab8e5}
+.hero .stats b{display:block;font-size:22px;color:#fff}
+@media(max-width:600px){.stage,.tabbar,.crumb,.wrap{margin-left:0;margin-right:0;padding-left:14px;padding-right:14px}.top h1{font-size:15px}}
+
+</style>
 </head>
 <body>
-  <div id="app"></div>
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+<div id="app"><div style="font-family:sans-serif;padding:40px;text-align:center;color:#5b6885">Loading Vidya Arunodaya…<br/><small>If this message stays, JavaScript is blocked in this viewer — open this file with Chrome/Edge after extracting the full folder.</small></div></div>
+<noscript><div style="font-family:sans-serif;padding:40px;text-align:center;color:#b02a3a">This app needs JavaScript. Open index.html in Chrome, Edge or Firefox.</div></noscript>
+<script>
+window.addEventListener("error",function(e){var a=document.getElementById("app");if(a&&a.textContent.indexOf("Loading")>-1){a.innerHTML="<div style='font-family:sans-serif;padding:40px;color:#b02a3a'><h2>Could not start</h2><p>"+ (e.message||"script error") +"</p><p>Make sure the FULL folder is extracted (index.html together with the sims/ and lessons/ folders), then open index.html in Chrome.</p></div>";}});
+</script>
+<script>
+/* Vidya Arunodaya — offline curriculum manifest.
+   Every asset is legally bundled:
+   - PhET sims: CC BY 4.0 (redistribution allowed, attribution kept)
+   - 3D models: royalty-free sample assets (viewer demo)
+   - Notes: ORIGINAL text written for this pack (no NCERT text reproduced)
+   - "Official chapter" links open ncert.nic.in / diksha.gov.in when online. */
+
+const CURRICULUM = {
+  "Class 10": {
+    "Science": [
+      {
+        ch: 1, title: "Chemical Reactions and Equations", titleHi: "रासायनिक अभिक्रियाएँ",
+        sim: "balancing-chemical-equations", model: null,
+        ncert: "https://ncert.nic.in/textbook/pdf/jesc101.pdf",
+        notes: "A chemical reaction rearranges atoms to form new substances. Atoms are never created or destroyed, so a chemical equation must be balanced — the same number of each atom on both sides. Explore this by balancing real equations in the simulation.",
+        notesHi: "रासायनिक अभिक्रिया में परमाणु पुनर्व्यवस्थित होकर नए पदार्थ बनाते हैं। परमाणु न बनते हैं न नष्ट होते हैं, इसलिए समीकरण संतुलित होना चाहिए।",
+        quiz: [
+          { q: "Why must a chemical equation be balanced?", opts: ["To look neat", "Atoms are conserved — not created or destroyed", "To use less paper"], a: 1 },
+          { q: "In 2H₂ + O₂ → 2H₂O, how many oxygen atoms are on the left?", opts: ["1", "2", "4"], a: 1 },
+        ],
+      },
+      {
+        ch: 4, title: "Carbon and its Compounds — Atomic Structure", titleHi: "परमाणु की संरचना",
+        sim: "build-an-atom", model: null,
+        ncert: "https://ncert.nic.in/textbook/pdf/jesc104.pdf",
+        notes: "Everything is made of atoms: a nucleus of protons and neutrons, with electrons around it. The number of protons decides which element it is. Build atoms yourself and watch the element change.",
+        notesHi: "प्रत्येक वस्तु परमाणुओं से बनी है — प्रोटॉन और न्यूट्रॉन का नाभिक तथा चारों ओर इलेक्ट्रॉन। प्रोटॉनों की संख्या तत्व तय करती है।",
+        quiz: [
+          { q: "What decides which element an atom is?", opts: ["Number of neutrons", "Number of protons", "Its colour"], a: 1 },
+          { q: "Where are electrons found?", opts: ["In the nucleus", "Around the nucleus", "Outside the atom entirely"], a: 1 },
+        ],
+      },
+      {
+        ch: 10, title: "Light — Reflection and Refraction", titleHi: "प्रकाश — परावर्तन और अपवर्तन",
+        sim: "geometric-optics-basics", model: null,
+        ncert: "https://ncert.nic.in/textbook/pdf/jesc110.pdf",
+        notes: "Light bends (refracts) when it passes from one medium to another, and lenses use this to form images. Move the object and the lens and watch where the image forms.",
+        notesHi: "प्रकाश एक माध्यम से दूसरे में जाने पर मुड़ता है (अपवर्तन), और लेंस इससे प्रतिबिंब बनाते हैं।",
+        quiz: [
+          { q: "A convex lens converges light to form an image at its…", opts: ["Focus", "Edge", "Centre only"], a: 0 },
+          { q: "Bending of light entering a new medium is called…", opts: ["Reflection", "Refraction", "Rotation"], a: 1 },
+        ],
+      },
+      {
+        ch: 11, title: "The Human Eye and the Colourful World", titleHi: "मानव नेत्र और रंगबिरंगा संसार",
+        lesson: "lessons/eye-class10.html", sim: null, model: null,
+        ncert: "https://ncert.nic.in/textbook/pdf/jesc111.pdf",
+        original: true,
+        notes: "OUR ORIGINAL interactive 3D lesson: rotate a cut-away eye, click each part, explore accommodation, vision defects, prism dispersion and why the sky is blue. This is the kind of original content we build for Arunachal.",
+        notesHi: "हमारा मौलिक इंटरैक्टिव 3D पाठ — नेत्र के भागों को घुमाकर देखें और समझें।",
+        quiz: [
+          { q: "Where is the image formed in a healthy eye?", opts: ["On the cornea", "On the retina", "On the iris"], a: 1 },
+          { q: "The sky looks blue because of…", opts: ["Blue oceans", "Scattering of light", "Blue air"], a: 1 },
+        ],
+      },
+      {
+        ch: 12, title: "Electricity", titleHi: "विद्युत",
+        sim: "circuit-construction-kit-dc", model: null,
+        ncert: "https://ncert.nic.in/textbook/pdf/jesc112.pdf",
+        notes: "An electric current flows when charges move through a closed circuit. Build circuits with batteries, bulbs, wires and switches, and see current, voltage and resistance in action.",
+        notesHi: "बंद परिपथ में आवेश गति करने पर विद्युत धारा बहती है। बैटरी, बल्ब, तार और स्विच से परिपथ बनाइए।",
+        quiz: [
+          { q: "Current flows only when the circuit is…", opts: ["Open", "Closed", "Broken"], a: 1 },
+          { q: "A device that breaks or completes a circuit is a…", opts: ["Switch", "Battery", "Bulb"], a: 0 },
+        ],
+      },
+    ],
+    "Mathematics": [
+      {
+        ch: 8, title: "Introduction to Trigonometry — Angles & Waves", titleHi: "त्रिकोणमिति",
+        sim: "wave-on-a-string", model: null,
+        ncert: "https://ncert.nic.in/textbook/pdf/jemh108.pdf",
+        notes: "Trigonometry describes repeating, wave-like patterns. A vibrating string shows how amplitude and frequency shape a wave — the same sine curve behind trigonometry.",
+        notesHi: "त्रिकोणमिति दोहराने वाले तरंग-पैटर्न का वर्णन करती है।",
+        quiz: [{ q: "The height of a wave is its…", opts: ["Amplitude", "Speed", "Colour"], a: 0 }],
+      },
+    ],
+  },
+  "Class 9": {
+    "Science": [
+      {
+        ch: 1, title: "Matter in Our Surroundings", titleHi: "हमारे आस-पास के पदार्थ",
+        sim: "states-of-matter-basics", model: null,
+        ncert: "https://ncert.nic.in/textbook/pdf/iesc101.pdf",
+        notes: "Matter exists as solid, liquid or gas depending on how much its particles move. Add or remove heat in the simulation and watch matter change state.",
+        notesHi: "पदार्थ ठोस, द्रव या गैस के रूप में होता है, जो कणों की गति पर निर्भर करता है।",
+        quiz: [
+          { q: "Heating a solid enough turns it into a…", opts: ["Gas directly always", "Liquid", "New element"], a: 1 },
+          { q: "Particles move fastest in a…", opts: ["Solid", "Liquid", "Gas"], a: 2 },
+        ],
+      },
+      {
+        ch: 10, title: "Gravitation", titleHi: "गुरुत्वाकर्षण",
+        sim: "gravity-and-orbits", model: null,
+        ncert: "https://ncert.nic.in/textbook/pdf/iesc110.pdf",
+        notes: "Every mass pulls every other mass. Gravity keeps planets in orbit around the Sun and the Moon around Earth. Turn gravity on and off and watch orbits form or break.",
+        notesHi: "प्रत्येक द्रव्यमान दूसरे को खींचता है। गुरुत्वाकर्षण ग्रहों को सूर्य के चारों ओर बनाए रखता है।",
+        quiz: [
+          { q: "What keeps planets orbiting the Sun?", opts: ["Wind", "Gravity", "Magnetism"], a: 1 },
+          { q: "Gravity between two objects depends on their…", opts: ["Colour", "Mass", "Age"], a: 1 },
+        ],
+      },
+      {
+        ch: 12, title: "Sound", titleHi: "ध्वनि",
+        sim: "wave-on-a-string", model: null,
+        ncert: "https://ncert.nic.in/textbook/pdf/iesc112.pdf",
+        notes: "Sound travels as a wave. Shake one end of a string and a wave carries energy along it — just as vibrations carry sound through air.",
+        notesHi: "ध्वनि तरंग के रूप में चलती है। तरंग ऊर्जा को आगे ले जाती है।",
+        quiz: [{ q: "Sound travels as a…", opts: ["Wave", "Solid", "Light ray"], a: 0 }],
+      },
+    ],
+  },
+  "Class 7": {
+    "Mathematics": [
+      {
+        ch: 2, title: "Fractions and Decimals", titleHi: "भिन्न और दशमलव",
+        sim: "fraction-matcher", model: null,
+        ncert: "https://ncert.nic.in/textbook/pdf/gemh102.pdf",
+        notes: "A fraction is a part of a whole. Match shapes and numbers to build an intuition for equal fractions — ½ = 2/4 = 3/6.",
+        notesHi: "भिन्न किसी वस्तु का एक भाग है। समान भिन्नों को मिलाइए।",
+        quiz: [{ q: "Which is equal to ½?", opts: ["2/4", "1/3", "3/5"], a: 0 }],
+      },
+    ],
+    "Science": [
+      {
+        ch: 1, title: "Nutrition in Plants (PlantVerse)", titleHi: "पौधों में पोषण",
+        lesson: "lessons/plantverse.html", sim: null, model: null, original: true,
+        ncert: "https://ncert.nic.in/textbook/pdf/gesc101.pdf",
+        notes: "OUR ORIGINAL interactive lesson: toggle sunlight, water and CO₂ and watch photosynthesis happen; explore stomata and how water and food travel in a plant.",
+        notesHi: "हमारा मौलिक इंटरैक्टिव पाठ — प्रकाश-संश्लेषण को समझें।",
+        quiz: [{ q: "Plants need which three things to make food?", opts: ["Sunlight, water, CO₂", "Soil, salt, wind", "Only water"], a: 0 }],
+      },
+    ],
+  },
+  "3D Model Lab": {
+    "Interactive 3D": [
+      {
+        ch: 1, title: "Animated human figure — 3D viewer", titleHi: "मानव आकृति — 3D",
+        model: "lessons/model3d-human.html", sim: null, sampleModel: true,
+        notes: "Drag to rotate, scroll or pinch to zoom, watch the animation — the viewer runs fully offline from the board's storage. In the deployed library, real CBSE 3D models (organs, machines, molecules) plug into this same viewer.",
+        notesHi: "इस 3D मॉडल को घुमाएँ और ज़ूम करें — पूरी तरह ऑफ़लाइन।",
+        quiz: [],
+      },
+      {
+        ch: 2, title: "Original 3D lesson — The Human Eye", titleHi: "मानव नेत्र — मौलिक 3D पाठ",
+        lesson: "lessons/eye-class10.html", sim: null, model: null, original: true,
+        notes: "OUR ORIGINAL 3D lesson reused here to show the difference between a plain model viewer and a full built lesson: a rotatable eye, clickable parts, and five interactive rooms — the standard we build original content to.",
+        notesHi: "हमारा मौलिक 3D पाठ — नेत्र के भागों को घुमाकर देखें।",
+        quiz: [],
+      },
+    ],
+  },
+};
+
+// UI strings incl. a local-language (Nyishi) sample to show localisation capability
+const I18N = {
+  en: { explore: "Explore", read: "Read", model3d: "3D Model", quiz: "Quiz", official: "Open official NCERT chapter", pick: "Pick a class to begin", offline: "Works 100% offline", lang: "English" },
+  hi: { explore: "प्रयोग करें", read: "पढ़ें", model3d: "3D मॉडल", quiz: "प्रश्नोत्तरी", official: "आधिकारिक NCERT अध्याय खोलें", pick: "आरंभ करने के लिए कक्षा चुनें", offline: "पूर्णतः ऑफ़लाइन चलता है", lang: "हिंदी" },
+  // Nyishi (Arunachal) — indicative sample localisation of the shell
+  nyi: { explore: "Ka-tola", read: "Lung-nam", model3d: "3D Model", quiz: "Ali-nam", official: "NCERT chapter open toku", pick: "Class ka nyi-nam", offline: "Internet ma-do bo chal-la", lang: "Nyishi (नमूना)" },
+};
+
+</script>
+<script>
+/* Vidya Arunodaya launcher — offline, pendrive-friendly. */
+let LANG = "en";
+const app = document.getElementById("app");
+const t = (k) => (I18N[LANG] && I18N[LANG][k]) || I18N.en[k];
+const SIM_NAMES = {
+  "balancing-chemical-equations": "Balancing Chemical Equations",
+  "build-an-atom": "Build an Atom", "geometric-optics-basics": "Geometric Optics",
+  "circuit-construction-kit-dc": "Circuit Construction Kit", "states-of-matter-basics": "States of Matter",
+  "gravity-and-orbits": "Gravity and Orbits", "wave-on-a-string": "Wave on a String",
+  "fraction-matcher": "Fraction Matcher",
+};
+
+function setLang(l) { LANG = l; render(); }
+
+function topbar() {
+  return `<div class="top">
+    <div class="logo">🌄</div>
+    <h1>Vidya Arunodaya<small>Offline Smart-Class Library · Arunachal Pradesh</small></h1>
+    <div class="sp"></div>
+    <span class="offline-badge">● ${t("offline")}</span>
+    <div class="langsel">
+      ${["en", "hi", "nyi"].map((l) => `<button class="${LANG === l ? "on" : ""}" onclick="setLang('${l}')">${I18N[l].lang}</button>`).join("")}
+    </div>
+  </div>`;
+}
+
+function render() {
+  location.hash = location.hash || "#/";
+  route();
+}
+window.onhashchange = route;
+
+function route() {
+  const parts = decodeURIComponent(location.hash.replace(/^#\//, "")).split("/").filter(Boolean);
+  if (parts.length === 0) return home();
+  if (parts.length === 1) return subjects(parts[0]);
+  if (parts.length === 2) return chapters(parts[0], parts[1]);
+  if (parts.length >= 3) return lesson(parts[0], parts[1], +parts[2]);
+}
+
+function home() {
+  const classes = Object.keys(CURRICULUM);
+  const totalCh = classes.reduce((a, c) => a + Object.values(CURRICULUM[c]).reduce((x, s) => x + s.length, 0), 0);
+  const sims = new Set(); Object.values(CURRICULUM).forEach(c => Object.values(c).forEach(s => s.forEach(ch => ch.sim && sims.add(ch.sim))));
+  app.innerHTML = topbar() + `
+    <div class="wrap">
+      <div class="hero">
+        <h2>One board. Every subject. No internet needed.</h2>
+        <p>NCERT-aligned chapters that open real interactive science simulations, 3D models and quizzes — in English, हिंदी and local language. Everything runs from the board's storage or a pendrive.</p>
+        <div class="stats">
+          <div><b>${totalCh}</b> chapters live</div>
+          <div><b>${sims.size}</b> interactive sims</div>
+          <div><b>EN · हिं · Nyishi</b> languages</div>
+          <div><b>100%</b> offline</div>
+        </div>
+      </div>
+      <div class="crumb"><b>${t("pick")}</b></div>
+      <div class="tiles">
+        ${classes.map((c) => {
+          const n = Object.values(CURRICULUM[c]).reduce((a, s) => a + s.length, 0);
+          const icon = c.includes("3D") ? "🧊" : "🎓";
+          return `<div class="tile" onclick="location.hash='#/${encodeURIComponent(c)}'">
+            <span class="cnt">${n} ch</span><div class="ic">${icon}</div><h3>${c}</h3>
+            <div class="meta">${Object.keys(CURRICULUM[c]).join(" · ")}</div></div>`;
+        }).join("")}
+      </div>
+    </div>`;
+}
+
+function subjects(cls) {
+  const subs = CURRICULUM[cls];
+  if (!subs) return home();
+  app.innerHTML = topbar() + `
+    <div class="wrap">
+      <div class="crumb"><a onclick="location.hash='#/'">Home</a> › <b>${cls}</b></div>
+      <div class="tiles">
+        ${Object.keys(subs).map((s) => {
+          const icon = s.includes("Math") ? "📐" : s.includes("3D") ? "🧊" : "🔬";
+          return `<div class="tile" onclick="location.hash='#/${encodeURIComponent(cls)}/${encodeURIComponent(s)}'">
+            <span class="cnt">${subs[s].length} ch</span><div class="ic">${icon}</div><h3>${s}</h3>
+            <div class="meta">${subs[s].length} chapters</div></div>`;
+        }).join("")}
+      </div>
+    </div>`;
+}
+
+function chapters(cls, sub) {
+  const list = CURRICULUM[cls] && CURRICULUM[cls][sub];
+  if (!list) return home();
+  app.innerHTML = topbar() + `
+    <div class="wrap">
+      <div class="crumb"><a onclick="location.hash='#/'">Home</a> › <a onclick="location.hash='#/${encodeURIComponent(cls)}'">${cls}</a> › <b>${sub}</b></div>
+      <div class="tiles">
+        ${list.map((ch, i) => {
+          const title = LANG === "hi" && ch.titleHi ? ch.titleHi : ch.title;
+          const tags = [];
+          if (ch.sim) tags.push('<span class="tag sim">SIMULATION</span>');
+          if (ch.model) tags.push('<span class="tag d3">3D MODEL</span>');
+          if (ch.original || ch.lesson) tags.push('<span class="tag orig">★ ORIGINAL</span>');
+          if (ch.quiz && ch.quiz.length) tags.push('<span class="tag quiz">QUIZ</span>');
+          tags.push('<span class="tag hi">हिं</span>');
+          return `<div class="tile chapter" onclick="location.hash='#/${encodeURIComponent(cls)}/${encodeURIComponent(sub)}/${i}'">
+            <span class="cnt">Ch ${ch.ch}</span><div class="ic">${ch.original || ch.lesson ? "✨" : ch.model ? "🧊" : "🔬"}</div>
+            <h3>${title}</h3><div style="margin-top:8px">${tags.join("")}</div></div>`;
+        }).join("")}
+      </div>
+    </div>`;
+}
+
+function lesson(cls, sub, i) {
+  const ch = CURRICULUM[cls][sub][i];
+  const title = LANG === "hi" && ch.titleHi ? ch.titleHi : ch.title;
+  const notes = LANG === "hi" && ch.notesHi ? ch.notesHi : ch.notes;
+  // available tabs
+  const tabs = [];
+  if (ch.lesson) tabs.push(["lesson", "✨ " + (t("explore"))]);
+  if (ch.sim) tabs.push(["sim", "🔬 " + t("explore")]);
+  if (ch.model) tabs.push(["model", "🧊 " + t("model3d")]);
+  tabs.push(["read", "📖 " + t("read")]);
+  if (ch.quiz && ch.quiz.length) tabs.push(["quiz", "✅ " + t("quiz")]);
+
+  app.innerHTML = topbar() + `
+    <div class="lessonhead">
+      <a class="btn" onclick="location.hash='#/${encodeURIComponent(cls)}/${encodeURIComponent(sub)}'">←</a>
+      <h2>${title}</h2>
+      <div class="sp" style="flex:1"></div>
+      <span style="color:var(--dim);font-size:13px">${cls} · ${sub} · Ch ${ch.ch}</span>
+    </div>
+    <div class="tabbar" id="tabbar">
+      ${tabs.map(([k, label], idx) => `<button data-tab="${k}" class="${idx === 0 ? "on" : ""}">${label}</button>`).join("")}
+    </div>
+    <div class="stage" id="stage"></div>
+    <div class="attrib" id="attrib"></div>`;
+
+  const stage = document.getElementById("stage");
+  const attrib = document.getElementById("attrib");
+  function show(tab) {
+    document.querySelectorAll("#tabbar button").forEach((b) => b.classList.toggle("on", b.dataset.tab === tab));
+    attrib.innerHTML = "";
+    if (tab === "sim") {
+      const loc = LANG === "hi" ? "hi" : "en";
+      const file = `sims/${ch.sim}_${loc}.html`;
+      stage.innerHTML = `<iframe src="${file}" allow="fullscreen" title="${ch.sim}"></iframe>`;
+      attrib.innerHTML = `Simulation: <b>${SIM_NAMES[ch.sim] || ch.sim}</b> — © PhET Interactive Simulations, University of Colorado Boulder, licensed CC&nbsp;BY&nbsp;4.0 (phet.colorado.edu). Bundled offline with attribution. ${LANG === "hi" ? "हिंदी संस्करण।" : ""}`;
+    } else if (tab === "lesson") {
+      stage.innerHTML = `<iframe src="${ch.lesson}" allow="fullscreen" title="${ch.title}"></iframe>`;
+      attrib.innerHTML = `Original interactive lesson built for the Arunachal programme — state-owned content.`;
+    } else if (tab === "model") {
+      stage.innerHTML = `<iframe src="${ch.model}" allow="fullscreen" title="3D model"></iframe>`;
+      attrib.innerHTML = ch.sampleModel ? `Sample 3D asset shown to demonstrate the fully-offline interactive viewer (drag to rotate, scroll to zoom, animated). The deployed library plugs real CBSE 3D models (organs, molecules, machines) into this same viewer. Sample model: Khronos glTF, royalty-free.` : "";
+    } else if (tab === "read") {
+      stage.innerHTML = `<div class="readbox"><p>${notes}</p>${ch.ncert ? `<a class="off" href="${ch.ncert}" target="_blank" rel="noreferrer">🔗 ${t("official")}</a> <span style="font-size:12px;color:var(--dim)">(opens when online)</span>` : ""}</div>`;
+      attrib.innerHTML = `Notes are original summaries written for this pack. Official NCERT chapter text opens from ncert.nic.in when online — never copied or repackaged.`;
+    } else if (tab === "quiz") {
+      renderQuiz(stage, ch.quiz);
+    }
+  }
+  document.querySelectorAll("#tabbar button").forEach((b) => (b.onclick = () => show(b.dataset.tab)));
+  show(tabs[0][0]);
+}
+
+function renderQuiz(stage, quiz) {
+  let i = 0, score = 0;
+  function step() {
+    if (i >= quiz.length) {
+      stage.innerHTML = `<div class="quizbox"><h3>Quiz complete — ${score}/${quiz.length} ✅</h3>
+        <p style="color:var(--dim)">In the deployed board, this score is recorded and (when internet is available) reported to the district dashboard.</p>
+        <button class="btn" onclick="location.hash=location.hash">Done</button></div>`;
+      return;
+    }
+    const q = quiz[i];
+    stage.innerHTML = `<div class="quizbox"><h3>Question ${i + 1} / ${quiz.length}</h3>
+      <p style="font-size:16px;margin-bottom:8px">${q.q}</p>
+      ${q.opts.map((o, idx) => `<button class="opt" data-i="${idx}">${o}</button>`).join("")}</div>`;
+    stage.querySelectorAll(".opt").forEach((b) => (b.onclick = () => {
+      const idx = +b.dataset.i;
+      stage.querySelectorAll(".opt").forEach((x) => { const di = +x.dataset.i; if (di === q.a) x.classList.add("ok"); else if (di === idx) x.classList.add("no"); });
+      if (idx === q.a) score++;
+      setTimeout(() => { i++; step(); }, 850);
+    }));
+  }
+  step();
+}
+
+render();
+
+</script>
 </body>
 </html>
