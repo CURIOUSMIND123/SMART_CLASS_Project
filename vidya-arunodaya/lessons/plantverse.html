@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PlantVerse</title><style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Segoe UI",system-ui,Arial,sans-serif;background:linear-gradient(180deg,#08210f,#0d3b1e);color:#eafff0;min-height:100vh}
+.wrap{display:grid;grid-template-columns:1fr 340px;gap:16px;padding:20px;max-width:1100px;margin:0 auto}
+@media(max-width:820px){.wrap{grid-template-columns:1fr}}
+.panel{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:18px}
+h1{font-size:20px;margin-bottom:6px}h2{font-size:16px;margin:6px 0}
+.toggles{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#eafff0;border-radius:10px;padding:10px 14px;font-size:14px;cursor:pointer;font-weight:600}
+button.on{background:#16a34a;border-color:#16a34a}
+p{font-size:14px;line-height:1.6;color:#d3f0dd;margin-bottom:10px}
+.quiz button{display:block;width:100%;text-align:left;margin:6px 0;background:rgba(255,255,255,.1)}
+.quiz button.ok{background:#16a34a}.quiz button.no{background:#dc2626}
+</style></head><body>
+<div class="wrap">
+<div class="panel" style="display:flex;flex-direction:column;align-items:center">
+  <div class="toggles">
+    <button id="sun" class="on">☀️ Sunlight</button>
+    <button id="water" class="on">💧 Water</button>
+    <button id="co2" class="on">🫧 CO₂</button>
+  </div>
+  <svg viewBox="0 0 300 340" width="100%" style="max-height:420px" id="svg"></svg>
+  <div id="status" style="font-weight:700;font-size:16px;margin-top:8px"></div>
+</div>
+<div class="panel">
+  <h1>🌱 Nutrition in Plants</h1>
+  <p><b>Class 7 · Science · original interactive lesson.</b> Tap the three inputs and watch the plant respond.</p>
+  <p>Plants make their own food by <b>photosynthesis</b>, using <b>sunlight</b>, <b>water</b> and <b>carbon dioxide</b>. Remove any one and the plant cannot make food.</p>
+  <div class="quiz" id="quiz"></div>
+</div></div>
+<script>
+const S={sun:1,water:1,co2:1};
+function draw(){const h=S.sun&&S.water&&S.co2;const g=id=>document.getElementById(id);
+ g("svg").innerHTML=`${S.sun?`<circle cx="255" cy="45" r="22" fill="#ffd23b"/>`:""}
+  <rect x="0" y="290" width="300" height="50" fill="#6b4a2b"/>
+  ${S.water?`<rect x="40" y="292" width="220" height="12" fill="#2f7fd6" opacity="0.5"/>`:""}
+  <rect x="145" y="150" width="10" height="145" fill="${h?'#3a8f3a':'#8a8f5a'}" rx="4"/>
+  ${[[-1,170],[1,190],[-1,215],[1,235]].map(([d,y])=>`<ellipse cx="${150+d*45}" cy="${y}" rx="42" ry="17" fill="${h?'#3fae4a':S.sun?'#9caf5a':'#b7a34a'}" transform="rotate(${d*20} ${150+d*45} ${y})"/>`).join("")}
+  <circle cx="150" cy="140" r="15" fill="${h?'#ff7ac0':'#c9c19a'}"/>
+  ${S.co2?`<text x="60" y="140" fill="#8ecbff" font-size="15">CO₂→</text>`:""}`;
+ g("status").textContent=h?"Photosynthesis is happening 🌿":"Missing an input — the plant struggles";
+ g("status").style.color=h?"#8ce0a0":"#ffb36b";}
+["sun","water","co2"].forEach(k=>document.getElementById(k).onclick=e=>{S[k]=!S[k];e.target.classList.toggle("on",S[k]);draw();});
+const Q=[{q:"Which THREE inputs make plant food?",o:["Sunlight, water, CO₂","Soil, oxygen, salt","Moonlight, sugar, sand"],a:0},{q:"Where does gas exchange happen?",o:["Roots","Stomata (leaf pores)","Flower"],a:1}];
+let qi=0;function quiz(){const c=Q[qi];document.getElementById("quiz").innerHTML=`<h2>Quiz ${qi+1}/${Q.length}</h2><p>${c.q}</p>`+c.o.map((o,i)=>`<button data-i="${i}">${o}</button>`).join("");
+ document.querySelectorAll("#quiz button").forEach(b=>b.onclick=()=>{const i=+b.dataset.i;b.classList.add(i===c.a?"ok":"no");setTimeout(()=>{qi++;qi<Q.length?quiz():document.getElementById("quiz").innerHTML="<h2>Great! Lesson complete 🎉</h2>";},700);});}
+draw();quiz();
+</script></body></html>
