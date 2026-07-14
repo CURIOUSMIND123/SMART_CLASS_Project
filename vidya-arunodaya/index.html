@@ -182,6 +182,21 @@ const CURRICULUM = {
       },
     ],
   },
+  "Class 6": {
+    "Science": [
+      {
+        ch: 1, title: "Planet Earth — Our Home in Space", titleHi: "हमारी पृथ्वी — अंतरिक्ष में हमारा घर",
+        lesson: "lessons/earth-3d.html", sim: null, model: null, original: true,
+        ncert: "https://ncert.nic.in/textbook/pdf/fess1dd.pdf",
+        notes: "OUR ORIGINAL flagship 3D lesson: a photoreal, rotatable Earth with real clouds, atmosphere and terrain, an orbiting Moon and a starfield. Tap the glowing pins — including Arunachal Pradesh — to learn about the equator, the poles, day and night, and the Moon.",
+        notesHi: "हमारा मौलिक 3D पाठ: वास्तविक बादलों, वायुमंडल और चंद्रमा के साथ घूमती हुई पृथ्वी। अरुणाचल प्रदेश सहित चमकते बिंदुओं पर टैप करें।",
+        quiz: [
+          { q: "Why does Arunachal Pradesh see the sunrise first in India?", opts: ["It is the easternmost", "It is the tallest", "It is the coldest"], a: 0 },
+          { q: "Day and night are caused by the Earth's…", opts: ["Rotation on its axis", "Distance from the Moon", "Clouds"], a: 0 },
+        ],
+      },
+    ],
+  },
   "Class 7": {
     "Mathematics": [
       {
@@ -207,14 +222,21 @@ const CURRICULUM = {
   "3D Model Lab": {
     "Interactive 3D": [
       {
-        ch: 1, title: "Animated human figure — 3D viewer", titleHi: "मानव आकृति — 3D",
+        ch: 1, title: "Planet Earth — photoreal 3D (flagship)", titleHi: "पृथ्वी — फ़ोटोरियल 3D",
+        lesson: "lessons/earth-3d.html", sim: null, model: null, original: true,
+        notes: "OUR flagship original 3D lesson — photoreal rotating Earth, clouds, atmosphere, orbiting Moon and clickable locations. This is the world-class standard we build original content to; it runs fully offline.",
+        notesHi: "हमारा प्रमुख मौलिक 3D पाठ — घूमती पृथ्वी, बादल, वायुमंडल और चंद्रमा।",
+        quiz: [],
+      },
+      {
+        ch: 2, title: "Animated human figure — 3D viewer", titleHi: "मानव आकृति — 3D",
         model: "lessons/model3d-human.html", sim: null, sampleModel: true,
         notes: "Drag to rotate, scroll or pinch to zoom, watch the animation — the viewer runs fully offline from the board's storage. In the deployed library, real CBSE 3D models (organs, machines, molecules) plug into this same viewer.",
         notesHi: "इस 3D मॉडल को घुमाएँ और ज़ूम करें — पूरी तरह ऑफ़लाइन।",
         quiz: [],
       },
       {
-        ch: 2, title: "Original 3D lesson — The Human Eye", titleHi: "मानव नेत्र — मौलिक 3D पाठ",
+        ch: 3, title: "Original 3D lesson — The Human Eye", titleHi: "मानव नेत्र — मौलिक 3D पाठ",
         lesson: "lessons/eye-class10.html", sim: null, model: null, original: true,
         notes: "OUR ORIGINAL 3D lesson reused here to show the difference between a plain model viewer and a full built lesson: a rotatable eye, clickable parts, and five interactive rooms — the standard we build original content to.",
         notesHi: "हमारा मौलिक 3D पाठ — नेत्र के भागों को घुमाकर देखें।",
