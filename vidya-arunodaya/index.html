@@ -182,6 +182,21 @@ const CURRICULUM = {
       },
     ],
   },
+  "Class 8": {
+    "Science": [
+      {
+        ch: 17, title: "Stars and the Solar System", titleHi: "तारे और सौर मंडल",
+        lesson: "lessons/solar-3d.html", sim: null, model: null, original: true,
+        ncert: "https://ncert.nic.in/textbook/pdf/hesc117.pdf",
+        notes: "OUR ORIGINAL flagship 3D lesson: the whole Solar System, planets orbiting the Sun with their names floating above them, an asteroid belt and a starfield. Tap any planet to fly to it and read its story. Includes a built-in teacher script (English + Hinglish).",
+        notesHi: "हमारा मौलिक 3D पाठ: पूरा सौर मंडल — सूर्य के चारों ओर घूमते ग्रह, उनके नाम ऊपर तैरते हुए। किसी भी ग्रह पर टैप करके वहाँ जाएँ।",
+        quiz: [
+          { q: "Which planet is closest to the Sun?", opts: ["Earth", "Mercury", "Jupiter"], a: 1 },
+          { q: "Which is the largest planet?", opts: ["Saturn", "Jupiter", "Neptune"], a: 1 },
+        ],
+      },
+    ],
+  },
   "Class 6": {
     "Science": [
       {
@@ -222,21 +237,28 @@ const CURRICULUM = {
   "3D Model Lab": {
     "Interactive 3D": [
       {
-        ch: 1, title: "Planet Earth — photoreal 3D (flagship)", titleHi: "पृथ्वी — फ़ोटोरियल 3D",
+        ch: 1, title: "The Solar System — interactive 3D (flagship)", titleHi: "सौर मंडल — इंटरैक्टिव 3D",
+        lesson: "lessons/solar-3d.html", sim: null, model: null, original: true,
+        notes: "OUR flagship original 3D lesson — the full Solar System with orbiting planets, floating name labels, fly-to-planet on tap, and a built-in teacher script. World-class standard, fully offline.",
+        notesHi: "हमारा प्रमुख मौलिक 3D पाठ — घूमते ग्रह, नाम लेबल और शिक्षक स्क्रिप्ट के साथ पूरा सौर मंडल।",
+        quiz: [],
+      },
+      {
+        ch: 2, title: "Planet Earth — photoreal 3D (flagship)", titleHi: "पृथ्वी — फ़ोटोरियल 3D",
         lesson: "lessons/earth-3d.html", sim: null, model: null, original: true,
         notes: "OUR flagship original 3D lesson — photoreal rotating Earth, clouds, atmosphere, orbiting Moon and clickable locations. This is the world-class standard we build original content to; it runs fully offline.",
         notesHi: "हमारा प्रमुख मौलिक 3D पाठ — घूमती पृथ्वी, बादल, वायुमंडल और चंद्रमा।",
         quiz: [],
       },
       {
-        ch: 2, title: "Animated human figure — 3D viewer", titleHi: "मानव आकृति — 3D",
+        ch: 3, title: "Animated human figure — 3D viewer", titleHi: "मानव आकृति — 3D",
         model: "lessons/model3d-human.html", sim: null, sampleModel: true,
         notes: "Drag to rotate, scroll or pinch to zoom, watch the animation — the viewer runs fully offline from the board's storage. In the deployed library, real CBSE 3D models (organs, machines, molecules) plug into this same viewer.",
         notesHi: "इस 3D मॉडल को घुमाएँ और ज़ूम करें — पूरी तरह ऑफ़लाइन।",
         quiz: [],
       },
       {
-        ch: 3, title: "Original 3D lesson — The Human Eye", titleHi: "मानव नेत्र — मौलिक 3D पाठ",
+        ch: 4, title: "Original 3D lesson — The Human Eye", titleHi: "मानव नेत्र — मौलिक 3D पाठ",
         lesson: "lessons/eye-class10.html", sim: null, model: null, original: true,
         notes: "OUR ORIGINAL 3D lesson reused here to show the difference between a plain model viewer and a full built lesson: a rotatable eye, clickable parts, and five interactive rooms — the standard we build original content to.",
         notesHi: "हमारा मौलिक 3D पाठ — नेत्र के भागों को घुमाकर देखें।",
