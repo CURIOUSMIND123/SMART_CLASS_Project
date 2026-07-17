@@ -165,6 +165,13 @@ const CURRICULUM = {
   "3D Model Lab": {
     "Interactive 3D": [
       {
+        ch: 0, title: "★ Where Do I Live? — cinematic journey to space", titleHi: "★ मैं कहाँ रहता हूँ? — अंतरिक्ष तक की यात्रा",
+        lesson: "lessons/cosmic-3d.html", sim: null, model: null, original: true,
+        notes: "OUR signature cinematic 3D lesson for young children: it starts with a child standing in their village and slowly zooms out — past trees and houses, above the clouds, to reveal the whole Earth, the Moon, satellites and the Sun. It answers 'where do I live, and what is out there?' with narration in English and Hindi.",
+        notesHi: "हमारा सिग्नेचर सिनेमैटिक 3D पाठ: एक बच्चे से शुरू होकर धीरे-धीरे पृथ्वी, चंद्रमा, उपग्रह और सूर्य तक ज़ूम आउट होता है।",
+        quiz: [],
+      },
+      {
         ch: 1, title: "The Solar System — interactive 3D (flagship)", titleHi: "सौर मंडल — इंटरैक्टिव 3D",
         lesson: "lessons/solar-3d.html", sim: null, model: null, original: true,
         notes: "OUR flagship original 3D lesson — the full Solar System with orbiting planets, floating name labels, fly-to-planet on tap, and a built-in teacher script. World-class standard, fully offline.",
