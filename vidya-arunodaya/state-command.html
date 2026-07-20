@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>State Education Command Centre — Arunachal Pradesh (demo)</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--bg:#070c1c;--panel:#0f1730;--panel2:#141f3f;--line:#22304f;--ink:#e8eefc;--dim:#8fa0c4;
+    --blue:#4b8dff;--teal:#22c39a;--amber:#ffb02e;--red:#ff5c6c;--purple:#a879ff}
+  body{font-family:"Segoe UI",system-ui,Roboto,Arial,sans-serif;background:
+    radial-gradient(1000px 500px at 85% -10%,rgba(75,141,255,.14),transparent 60%),
+    radial-gradient(900px 500px at 0% 0%,rgba(168,121,255,.10),transparent 55%),var(--bg);
+    color:var(--ink);min-height:100vh}
+  .top{display:flex;align-items:center;gap:14px;padding:14px 26px;position:sticky;top:0;z-index:30;
+    background:linear-gradient(100deg,rgba(9,14,30,.96),rgba(15,25,55,.96));border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
+  .top .logo{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#ffb347,#ff5e62);display:flex;align-items:center;justify-content:center;font-size:23px}
+  .top h1{font-size:17px;font-weight:800;line-height:1.2}
+  .top h1 small{display:block;font-size:11px;color:var(--dim);font-weight:400}
+  .top .sp{flex:1}
+  .sync{display:flex;align-items:center;gap:9px;background:rgba(34,195,154,.12);border:1px solid rgba(34,195,154,.4);
+    color:#8ff0d4;font-size:12px;font-weight:600;padding:7px 14px;border-radius:20px}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal);animation:pulse 2s infinite}
+  @keyframes pulse{50%{opacity:.4}}
+  .ribbon{background:rgba(255,176,46,.1);border-bottom:1px solid rgba(255,176,46,.3);color:#ffd58a;font-size:12.5px;padding:8px 26px;text-align:center}
+  .wrap{max-width:1300px;margin:0 auto;padding:22px 26px 70px}
+  .lead{font-size:14px;color:var(--dim);margin-bottom:18px}
+  .lead b{color:var(--ink)}
+  .grid{display:grid;gap:16px}
+  .k4{grid-template-columns:repeat(4,1fr)}.k3{grid-template-columns:repeat(3,1fr)}.k2{grid-template-columns:1.4fr 1fr}
+  @media(max-width:1000px){.k4{grid-template-columns:repeat(2,1fr)}.k3,.k2{grid-template-columns:1fr}}
+  .card{position:relative;background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:16px;padding:18px}
+  .card h3{font-size:12.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+  .stat .n{font-size:30px;font-weight:800;line-height:1}
+  .stat .l{font-size:12px;color:var(--dim);margin-top:6px}
+  .teal .n{color:var(--teal)}.amber .n{color:var(--amber)}.red .n{color:var(--red)}.blue .n{color:var(--blue)}.purple .n{color:var(--purple)}
+  .info{margin-left:auto;width:18px;height:18px;border-radius:50%;background:rgba(75,141,255,.18);color:#9dc0ff;font-size:12px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;cursor:help;position:relative;flex:none}
+  .info::after{content:attr(data-tip);position:absolute;bottom:135%;right:-4px;width:260px;background:#050912;color:var(--ink);
+    font-size:12px;font-weight:400;line-height:1.55;padding:11px 13px;border-radius:10px;opacity:0;pointer-events:none;transition:.15s;
+    box-shadow:0 12px 34px rgba(0,0,0,.6);border:1px solid var(--line);z-index:40}
+  .info:hover::after{opacity:1}
+  /* red flag hero */
+  .flags{display:grid;gap:12px;grid-template-columns:repeat(3,1fr)}
+  @media(max-width:900px){.flags{grid-template-columns:1fr}}
+  .flag{background:linear-gradient(180deg,rgba(255,92,108,.08),rgba(15,23,48,.6));border:1px solid rgba(255,92,108,.32);
+    border-radius:14px;padding:16px;cursor:pointer;transition:.15s}
+  .flag:hover{border-color:var(--red);transform:translateY(-3px);box-shadow:0 14px 34px rgba(255,92,108,.18)}
+  .flag.sel{border-color:var(--red);background:linear-gradient(180deg,rgba(255,92,108,.16),rgba(15,23,48,.7))}
+  .flag .ico{font-size:22px}
+  .flag .cnt{font-size:26px;font-weight:800;color:var(--red);margin:6px 0 2px}
+  .flag .t{font-size:13px;font-weight:700}
+  .flag .d{font-size:11.5px;color:var(--dim);margin-top:4px;line-height:1.45}
+  .flag .amt{font-size:11.5px;color:var(--amber);margin-top:6px;font-weight:700}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th{text-align:left;color:var(--dim);font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;padding:8px 10px;border-bottom:1px solid var(--line)}
+  td{padding:8px 10px;border-bottom:1px solid rgba(34,48,79,.5)}
+  tr:hover td{background:rgba(75,141,255,.06)}
+  .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:700}
+  .b-green{background:rgba(34,195,154,.16);color:#6fe6c4}.b-amber{background:rgba(255,176,46,.16);color:#ffce80}.b-red{background:rgba(255,92,108,.16);color:#ff9aa5}
+  .bar{height:7px;background:#1a2647;border-radius:6px;overflow:hidden;margin-top:5px}.bar>div{height:100%}
+  .flagbox{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:16px}
+  .flagbox h3{font-size:14px;color:var(--ink);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .flagbox .sub{font-size:12px;color:var(--dim);margin-bottom:12px}
+  .pill{display:inline-block;background:rgba(75,141,255,.14);color:#9dc0ff;font-size:11px;padding:3px 10px;border-radius:20px;margin:0 4px 4px 0}
+  .foot{margin-top:26px;font-size:11px;color:var(--dim);text-align:center;line-height:1.7}
+  .mini{display:flex;justify-content:space-between;font-size:12.5px;padding:7px 0;border-bottom:1px solid rgba(34,48,79,.5)}
+  .mini b{font-weight:700}
+  h2.sec{font-size:15px;margin:24px 0 12px;display:flex;align-items:center;gap:8px}
+  .tag{font-size:10px;background:rgba(168,121,255,.16);color:#c9b0ff;padding:2px 8px;border-radius:6px;font-weight:700}
+</style>
+</head>
+<body>
+  <div class="top">
+    <div class="logo">🌄</div>
+    <h1>State Education Command Centre<small>Vidya Arunodaya · Government of Arunachal Pradesh · CM / Education Secretary view</small></h1>
+    <div class="sp"></div>
+    <div class="sync"><span class="dot"></span><span id="syncTxt">Syncing… </span></div>
+  </div>
+  <div class="ribbon">One screen for <b>3,000 schools</b>. Each school syncs its biometric attendance, bills and device data whenever it gets internet for a while each day. Hover <b>ⓘ</b> for what each panel means · <b>demo data</b>.</div>
+
+  <div class="wrap">
+    <div class="lead">Good morning. Here is the state of every government school this morning — <b>who showed up, what's working, and where money or attendance doesn't add up.</b> Click a red flag to see the schools behind it.</div>
+
+    <!-- STATE KPIs -->
+    <div class="grid k4" id="kpis"></div>
+
+    <!-- RED FLAGS -->
+    <h2 class="sec">🚩 Red Flags — where the numbers don't add up <span class="tag">AI ANOMALY ENGINE</span></h2>
+    <div class="flags" id="flags"></div>
+    <div class="flagbox" id="flagDetail">
+      <h3 id="fdTitle">Click a red flag above</h3>
+      <div class="sub" id="fdSub">The command centre auto-scans all 3,000 schools every sync and surfaces the ones that need investigation — so a Secretary sees problems without asking for a single report.</div>
+      <div style="overflow-x:auto"><table id="fdTable"></table></div>
+    </div>
+
+    <!-- ATTENDANCE + MEALS -->
+    <h2 class="sec">🪪 Biometric attendance & mid-day meal integrity</h2>
+    <div class="grid k3">
+      <div class="card">
+        <h3>Teacher attendance (biometric) <span class="info" data-tip="Fingerprint/face terminal in each school records every teacher's arrival. Compared against the payroll — if far fewer show up than are paid, that school is flagged for ghost teachers.">ⓘ</span></h3>
+        <div class="stat teal"><div class="n" id="tPresent">—</div><div class="l">of <span id="tTotal">—</span> teachers on payroll present today</div></div>
+        <div class="bar"><div id="tBar" style="background:var(--teal)"></div></div>
+      </div>
+      <div class="card">
+        <h3>Student attendance (biometric) <span class="info" data-tip="Students mark attendance on the same terminal / board. Compared against enrolled rolls — a big gap points to inflated ('phantom') enrollment used to draw extra funds.">ⓘ</span></h3>
+        <div class="stat blue"><div class="n" id="sPresent">—</div><div class="l">of <span id="sTotal">—</span> enrolled students present today</div></div>
+        <div class="bar"><div id="sBar" style="background:var(--blue)"></div></div>
+      </div>
+      <div class="card">
+        <h3>Mid-day meals served <span class="info" data-tip="Meals claimed for reimbursement vs students actually present (biometric). Claiming far more meals than children present is the classic mid-day-meal leakage — auto-flagged here.">ⓘ</span></h3>
+        <div class="stat amber"><div class="n" id="meals">—</div><div class="l">meals claimed today · <span id="mealGap">—</span></div></div>
+        <div class="bar"><div id="mealBar" style="background:var(--amber)"></div></div>
+      </div>
+    </div>
+
+    <!-- BILLS + FUNDS -->
+    <h2 class="sec">🧾 Bills & funds — submitted directly by each school</h2>
+    <div class="grid k2">
+      <div class="card">
+        <h3>Fund utilisation <span class="info" data-tip="Every rupee sanctioned to a school vs what it has actually spent, with a bill uploaded as evidence. Unspent grants near year-end and spending without bills are both flagged.">ⓘ</span></h3>
+        <div class="grid k3" style="gap:12px">
+          <div class="stat"><div class="n" style="font-size:22px" id="fSanc">—</div><div class="l">sanctioned</div></div>
+          <div class="stat teal"><div class="n" style="font-size:22px" id="fSpent">—</div><div class="l">spent (with bills)</div></div>
+          <div class="stat amber"><div class="n" style="font-size:22px" id="fUnspent">—</div><div class="l">unspent</div></div>
+        </div>
+        <div style="margin-top:12px">
+          <div class="mini"><span>Bills submitted this month</span><b id="billCount">—</b></div>
+          <div class="mini"><span>Bills auto-flagged (duplicate / round-number / vendor concentration)</span><b style="color:var(--red)" id="billFlag">—</b></div>
+          <div class="mini" style="border:none"><span>Schools with grant unspent &gt; 80% (year almost over)</span><b style="color:var(--amber)" id="unspentSchools">—</b></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Assets — bought vs actually used <span class="info" data-tip="Smart boards and devices report their own health and usage. A board that is 'working' but has run zero lessons for weeks means public money bought a screen nobody uses — flagged as a dead asset.">ⓘ</span></h3>
+        <div class="mini"><span>Smart boards deployed</span><b id="aBoards">—</b></div>
+        <div class="mini"><span>Online / reporting</span><b style="color:var(--teal)" id="aOnline">—</b></div>
+        <div class="mini"><span>Working but <b>unused</b> 30+ days (dead assets)</span><b style="color:var(--red)" id="aDead">—</b></div>
+        <div class="mini" style="border:none"><span>Lessons run across the state this week</span><b style="color:var(--blue)" id="aLessons">—</b></div>
+      </div>
+    </div>
+
+    <!-- DISTRICTS -->
+    <h2 class="sec">🗺️ Districts — drill down <span class="info" data-tip="Every district ranked. An 'Integrity score' blends teacher/student attendance, meal accuracy, clean bills and asset usage into one number so the worst districts rise to the top.">ⓘ</span></h2>
+    <div class="card" style="padding:8px 0">
+      <div style="overflow-x:auto"><table id="distTable">
+        <thead><tr><th>District</th><th>Schools</th><th>Teacher present</th><th>Student present</th><th>Red flags</th><th>Funds at risk</th><th>Integrity score</th></tr></thead>
+        <tbody id="distRows"></tbody>
+      </table></div>
+    </div>
+
+    <div class="foot">
+      Vidya Arunodaya — State Education Command Centre. <b>Demonstration with procedurally generated data across 3,000 schools.</b><br>
+      Offline-first: each school runs locally on its board + biometric terminal and syncs when any internet is available. The State never chases reports — the data arrives on its own.<br>
+      Software and content are the property of the State · no student personal data is shown · anomaly flags are decision-support, always verified by an officer before action.
+    </div>
+  </div>
+
+  <script>
+  // ---------- generate a realistic 3,000-school dataset ----------
+  const DISTRICTS = ["Tawang","West Kameng","East Kameng","Papum Pare","Kurung Kumey","Kra Daadi","Lower Subansiri","Upper Subansiri","West Siang","Lower Siang","Leparada","Siang","Upper Siang","East Siang","Lower Dibang Valley","Dibang Valley","Anjaw","Lohit","Namsai","Changlang","Tirap","Longding","Kamle","Pakke-Kessang","Shi-Yomi"];
+  let seed = 20260718;
+  const rnd = () => { seed = (seed*1103515245+12345)&0x7fffffff; return seed/0x7fffffff; };
+  const ri = (a,b) => Math.floor(a+rnd()*(b-a+1));
+
+  const schools=[];
+  const TARGET=3000, perD=Math.round(TARGET/DISTRICTS.length);
+  DISTRICTS.forEach((d,di)=>{
+    for(let i=0;i<perD;i++){
+      const enrolled=ri(60,520);
+      // remoteness/poor-governance factor raises problems in some districts
+      const risk=(di%5===0?0.35:0)+(di%7===0?0.25:0)+rnd()*0.5;
+      const tOn=ri(4,26);
+      const tPct=Math.max(0.3,Math.min(1, 0.9-risk*0.5+rnd()*0.15));
+      const sPct=Math.max(0.25,Math.min(0.98, 0.82-risk*0.45+rnd()*0.18));
+      const tPresent=Math.round(tOn*tPct), sPresent=Math.round(enrolled*sPct);
+      const mealInflate=1+(risk>0.6?rnd()*0.5:rnd()*0.12);
+      const meals=Math.round(sPresent*mealInflate);
+      const sanctioned=ri(3,40)*100000;
+      const spentPct=Math.max(0.05,Math.min(1.15, 0.6-risk*0.3+rnd()*0.5));
+      const spent=Math.round(sanctioned*spentPct);
+      const bills=ri(2,14), billFlag=(risk>0.55&&rnd()>0.4)?ri(1,3):(rnd()>0.9?1:0);
+      const boards=ri(1,3), online=rnd()>0.12*(1+risk)?boards:ri(0,boards);
+      const lessonsWk=online>0?(risk>0.6&&rnd()>0.5?0:ri(0,60)):0;
+      schools.push({d,di,name:`Govt ${["UPS","MS","Sec","HSS"][ri(0,3)]} ${d.split(" ")[0]}-${i+1}`,
+        enrolled,tOn,tPresent,sPresent,meals,sanctioned,spent,bills,billFlag,boards,online,lessonsWk,risk,
+        // flags
+        ghost: tPresent/tOn<0.55,
+        phantom: sPresent/enrolled<0.45,
+        mealScam: meals/Math.max(1,sPresent)>1.3,
+        deadBoard: online>0&&lessonsWk===0,
+        unspent: spent/sanctioned<0.4,
+        overspent: spent/sanctioned>1.0 || (spent>0 && bills===0),
+      });
+    }
+  });
+
+  const sum=(f)=>schools.reduce((a,s)=>a+f(s),0);
+  const inr=(n)=>{ n=Math.round(n); if(n>=1e7)return "₹"+(n/1e7).toFixed(2)+" Cr"; if(n>=1e5)return "₹"+(n/1e5).toFixed(1)+" L"; return "₹"+n.toLocaleString("en-IN"); };
+  const K=(n)=>n>=1e5?(n/1e5).toFixed(1)+"L":n>=1000?(n/1000).toFixed(1)+"k":n;
+
+  // ---------- KPIs ----------
+  const totSchools=schools.length, totEnroll=sum(s=>s.enrolled), totPresentS=sum(s=>s.sPresent);
+  const totT=sum(s=>s.tOn), totPresentT=sum(s=>s.tPresent);
+  const sanc=sum(s=>s.sanctioned), spent=sum(s=>s.spent);
+  const flagSchools=schools.filter(s=>s.ghost||s.phantom||s.mealScam||s.deadBoard||s.unspent||s.overspent).length;
+  document.getElementById("kpis").innerHTML=[
+    ["blue",K(totSchools),"Government schools live","Every school reporting into this one screen."],
+    ["teal",Math.round(totPresentT/totT*100)+"%","Teachers present today","Biometric — "+K(totPresentT)+" of "+K(totT)+" on payroll."],
+    ["amber",Math.round(totPresentS/totEnroll*100)+"%","Students present today","Biometric — "+K(totPresentS)+" of "+K(totEnroll)+" enrolled."],
+    ["red",K(flagSchools),"Schools with red flags","Need a closer look this week."],
+  ].map(([t,n,l,tip])=>`<div class="card stat ${t}"><h3>${l}<span class="info" data-tip="${tip}">ⓘ</span></h3><div class="n">${n}</div><div class="l">${tip}</div></div>`).join("");
+
+  // ---------- red flags ----------
+  const FLAGS=[
+    {k:"ghost",ico:"👻",t:"Ghost teachers",d:"Far fewer teachers show up than are on the payroll.",col:s=>s.ghost, amt:s=>Math.round((s.tOn-s.tPresent)*35000)},
+    {k:"phantom",ico:"🧑‍🤝‍🧑",t:"Phantom enrollment",d:"Very few enrolled students actually attend — rolls may be inflated for funds.",col:s=>s.phantom, amt:s=>Math.round((s.enrolled-s.sPresent)*1200)},
+    {k:"mealScam",ico:"🍛",t:"Mid-day meal leakage",d:"More meals claimed than children present.",col:s=>s.mealScam, amt:s=>Math.round((s.meals-s.sPresent)*7*25)},
+    {k:"overspent",ico:"🧾",t:"Suspicious / missing bills",d:"Money spent with no bill, over-sanction, or auto-flagged invoices.",col:s=>s.overspent||s.billFlag>0, amt:s=>s.billFlag*45000+(s.spent>s.sanctioned?s.spent-s.sanctioned:0)},
+    {k:"deadBoard",ico:"🖥️",t:"Dead assets",d:"Boards working but zero lessons for 30+ days — bought, never used.",col:s=>s.deadBoard, amt:s=>s.boards*40000},
+    {k:"unspent",ico:"💰",t:"Grants lying unspent",d:"Sanctioned funds barely touched with the year almost over.",col:s=>s.unspent, amt:s=>s.sanctioned-s.spent},
+  ];
+  const flagEl=document.getElementById("flags");
+  flagEl.innerHTML=FLAGS.map((f,i)=>{
+    const list=schools.filter(f.col); const amt=list.reduce((a,s)=>a+f.amt(s),0);
+    return `<div class="flag" data-i="${i}"><div class="ico">${f.ico}</div><div class="cnt">${list.length}</div><div class="t">${f.t}</div><div class="d">${f.d}</div><div class="amt">≈ ${inr(amt)} at risk</div></div>`;
+  }).join("");
+  function showFlag(i,scroll){
+    document.querySelectorAll(".flag").forEach((e,j)=>e.classList.toggle("sel",j===i));
+    const f=FLAGS[i]; const list=schools.filter(f.col).sort((a,b)=>f.amt(b)-f.amt(a)).slice(0,12);
+    document.getElementById("fdTitle").textContent=`${f.ico} ${f.t} — ${schools.filter(f.col).length} schools flagged`;
+    document.getElementById("fdSub").textContent=f.d+" Showing the 12 highest-value cases. An officer verifies before any action.";
+    document.getElementById("fdTable").innerHTML=
+      `<thead><tr><th>School</th><th>District</th><th>Detail</th><th>Est. value at risk</th></tr></thead><tbody>`+
+      list.map(s=>{let det="";
+        if(f.k==="ghost")det=`${s.tPresent}/${s.tOn} teachers present`;
+        else if(f.k==="phantom")det=`${s.sPresent}/${s.enrolled} students present (${Math.round(s.sPresent/s.enrolled*100)}%)`;
+        else if(f.k==="mealScam")det=`${s.meals} meals vs ${s.sPresent} present`;
+        else if(f.k==="overspent")det=s.bills===0?`${inr(s.spent)} spent, no bill`:`${s.billFlag} bill(s) flagged`;
+        else if(f.k==="deadBoard")det=`${s.online} board(s), 0 lessons/30d`;
+        else det=`${Math.round(s.spent/s.sanctioned*100)}% of ${inr(s.sanctioned)} used`;
+        return `<tr><td><b>${s.name}</b></td><td>${s.d}</td><td>${det}</td><td style="color:var(--amber);font-weight:700">${inr(f.amt(s))}</td></tr>`;
+      }).join("")+`</tbody>`;
+    if(scroll)document.getElementById("flagDetail").scrollIntoView({behavior:"smooth",block:"nearest"});
+  }
+  flagEl.querySelectorAll(".flag").forEach(e=>e.onclick=()=>showFlag(+e.dataset.i,true));
+
+  // ---------- attendance / meals ----------
+  document.getElementById("tPresent").textContent=Math.round(totPresentT/totT*100)+"%";
+  document.getElementById("tTotal").textContent=K(totT);
+  document.getElementById("tBar").style.width=Math.round(totPresentT/totT*100)+"%";
+  document.getElementById("sPresent").textContent=Math.round(totPresentS/totEnroll*100)+"%";
+  document.getElementById("sTotal").textContent=K(totEnroll);
+  document.getElementById("sBar").style.width=Math.round(totPresentS/totEnroll*100)+"%";
+  const totMeals=sum(s=>s.meals), mealGap=totMeals-totPresentS;
+  document.getElementById("meals").textContent=K(totMeals);
+  document.getElementById("mealGap").innerHTML=`<b style="color:var(--red)">${K(mealGap)} more than children present</b>`;
+  document.getElementById("mealBar").style.width=Math.min(100,Math.round(totPresentS/totMeals*100))+"%";
+
+  // ---------- funds / assets ----------
+  document.getElementById("fSanc").textContent=inr(sanc);
+  document.getElementById("fSpent").textContent=inr(spent);
+  document.getElementById("fUnspent").textContent=inr(sanc-spent);
+  document.getElementById("billCount").textContent=K(sum(s=>s.bills));
+  document.getElementById("billFlag").textContent=K(sum(s=>s.billFlag));
+  document.getElementById("unspentSchools").textContent=K(schools.filter(s=>s.unspent).length);
+  document.getElementById("aBoards").textContent=K(sum(s=>s.boards));
+  document.getElementById("aOnline").textContent=K(sum(s=>s.online));
+  document.getElementById("aDead").textContent=K(schools.filter(s=>s.deadBoard).length);
+  document.getElementById("aLessons").textContent=K(sum(s=>s.lessonsWk));
+
+  // ---------- districts ----------
+  const dRows=DISTRICTS.map(d=>{
+    const ds=schools.filter(s=>s.d===d);
+    const tP=ds.reduce((a,s)=>a+s.tPresent,0)/Math.max(1,ds.reduce((a,s)=>a+s.tOn,0));
+    const sP=ds.reduce((a,s)=>a+s.sPresent,0)/Math.max(1,ds.reduce((a,s)=>a+s.enrolled,0));
+    const flags=ds.filter(s=>s.ghost||s.phantom||s.mealScam||s.deadBoard||s.unspent||s.overspent).length;
+    const risk=ds.reduce((a,s)=>a+(s.unspent?s.sanctioned-s.spent:0)+(s.overspent?Math.max(0,s.spent-s.sanctioned):0),0);
+    const integrity=Math.round((tP*35+sP*30+(1-flags/ds.length)*35));
+    return {d,n:ds.length,tP,sP,flags,risk,integrity};
+  }).sort((a,b)=>a.integrity-b.integrity);
+  document.getElementById("distRows").innerHTML=dRows.map(r=>{
+    const tone=r.integrity<55?"b-red":r.integrity<72?"b-amber":"b-green";
+    return `<tr><td><b>${r.d}</b></td><td>${r.n}</td>
+      <td>${Math.round(r.tP*100)}%</td><td>${Math.round(r.sP*100)}%</td>
+      <td>${r.flags?`<span class="badge b-red">${r.flags}</span>`:'<span class="badge b-green">0</span>'}</td>
+      <td style="color:var(--amber)">${inr(r.risk)}</td>
+      <td><span class="badge ${tone}">${r.integrity}/100</span></td></tr>`;
+  }).join("");
+
+  // ---------- sync ticker ----------
+  let synced=Math.round(totSchools*0.72);
+  const st=document.getElementById("syncTxt");
+  function tick(){ if(synced<totSchools){synced+=ri(3,18); if(synced>totSchools)synced=totSchools;}
+    st.textContent=`${K(synced)} / ${K(totSchools)} schools synced today`; }
+  tick(); setInterval(tick,1500);
+
+  showFlag(0,false);
+  </script>
+</body>
+</html>
