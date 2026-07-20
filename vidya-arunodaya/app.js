@@ -17,7 +17,8 @@ function topbar() {
     <div class="logo">🌄</div>
     <h1>Vidya Arunodaya<small>Offline Smart-Class Library · Arunachal Pradesh</small></h1>
     <div class="sp"></div>
-    <a href="state-command.html" class="cmdlink" title="Open the state-wide CM / Secretary cockpit — 3,000 schools">🛰️ Command Centre</a>
+    <a href="command.html" class="cmdlink" title="Open the State Education Command Centre — 3,000 schools">Command Centre</a>
+    <a href="school-erp.html" class="cmdlink" title="Open a single school's management view">School ERP</a>
     <span class="offline-badge">● ${t("offline")}</span>
     <div class="langsel">
       ${["en", "hi", "nyi"].map((l) => `<button class="${LANG === l ? "on" : ""}" onclick="setLang('${l}')">${I18N[l].lang}</button>`).join("")}
